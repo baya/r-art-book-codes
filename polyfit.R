@@ -15,9 +15,9 @@ polyfit <- function(y, x, maxdeg){
 
 print.polyreg <- function(fits){
   maxdeg <- length(fits) - 2
-  n <- length(fit$y)
+  n <- length(fits$y)
   tbl <- matrix(nrow=maxdeg, ncol=1)
-  colname(tbl) <- "MSPE"
+  colnames(tbl) <- "MSPE"
   for(i in 1:maxdeg){
     fi <- fits[[i]]
     errs <- fits$y - fi$fitted.cvvalues
@@ -40,3 +40,25 @@ powers <- function(x, dg){
   return(pw)
 }
 
+lvoneout <- function(y, xmat){
+  n <- length(y)
+  predy <- vector(length=n)
+  for(i in 1:n){
+    lmo <- lm(y[-i] ~ xmat[-i,])
+    betahat <- as.vector(lmo$coef)
+    predy[i] <- betahat %*% c(1, xmat[i,])
+  }
+  
+  return(predy)
+  
+}
+
+poly <- function(x, cfs){
+  val <- cfs[1]
+  prod <- 1
+  dg <- length(cfs) - 1
+  for(i in 1:dg){
+    prod <- prod * x
+    val <- val + cfs[i+1] * prod
+  }
+}
