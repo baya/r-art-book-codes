@@ -30,6 +30,21 @@ print.polyreg <- function(fits){
     
 }
 
+plot.polyreg <- function(fits){
+  plot(fits$x, fits$y, xlab="X", ylab="Y")
+  maxdg <- length(fits) - 2
+  cols <- c("red", "green", "blue")
+  dg <- curvecount <- 1
+  while(dg < maxdg){
+    prompt <- paste("RETURN for XV fit for degree", dg, "or type degree", "or q for quit")
+    rl <- readline(prompt)
+    dg <- if(rl == "") dg else if (rl != "q") as.integer(rl) else break
+    lines(fits$x, fits[[dg]]$fitted.values, col=cols[curvecount%%3 + 1])
+    dg <- dg + 1
+    curvecount <- curvecount + 1
+  }
+}
+
 powers <- function(x, dg){
   pw <- matrix(x, nrow=length(x))
   prod <- x
